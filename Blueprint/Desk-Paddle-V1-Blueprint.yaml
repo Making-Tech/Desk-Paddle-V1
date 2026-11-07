@@ -1,0 +1,240 @@
+blueprint:
+  name: ESPHome Desk Paddle V1
+  description: >
+    Control Home Assistant actions using the ESPHome Desk Paddle V1
+    with four buttons. Supports single, double, triple, and hold.
+  domain: automation
+
+  input:
+    controller_device:
+      name: ESPHome Controller
+      description: Select your Desk Controller device.
+      selector:
+        device:
+          integration: esphome
+
+    button_1_single:
+      name: Button 1 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_1_double:
+      name: Button 1 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_1_triple:
+      name: Button 1 - Triple Press
+      default: []
+      selector:
+        action: {}
+    button_1_hold:
+      name: Button 1 - Hold
+      default: []
+      selector:
+        action: {}
+
+    button_2_single:
+      name: Button 2 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_2_double:
+      name: Button 2 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_2_triple:
+      name: Button 2 - Triple Press
+      default: []
+      selector:
+        action: {}
+    button_2_hold:
+      name: Button 2 - Hold
+      default: []
+      selector:
+        action: {}
+
+    button_3_single:
+      name: Button 3 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_3_double:
+      name: Button 3 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_3_triple:
+      name: Button 3 - Triple Press
+      default: []
+      selector:
+        action: {}
+    button_3_hold:
+      name: Button 3 - Hold
+      default: []
+      selector:
+        action: {}
+
+    button_4_single:
+      name: Button 4 - Single Press
+      default: []
+      selector:
+        action: {}
+    button_4_double:
+      name: Button 4 - Double Press
+      default: []
+      selector:
+        action: {}
+    button_4_triple:
+      name: Button 4 - Triple Press
+      default: []
+      selector:
+        action: {}
+    button_4_hold:
+      name: Button 4 - Hold
+      default: []
+      selector:
+        action: {}
+
+mode: queued
+max: 20
+max_exceeded: silent
+
+trigger:
+  - platform: event
+    event_type: state_changed
+
+variables:
+  controller_device: !input controller_device
+
+condition:
+  - condition: template
+    value_template: >
+      {% set entity = trigger.event.data.entity_id %}
+      {% set new = trigger.event.data.new_state %}
+      {{
+        new is not none
+        and entity in device_entities(controller_device)
+        and entity.endswith('_action')
+        and new.state in ['single', 'double', 'triple', 'hold']
+      }}
+
+action:
+  - choose:
+
+      # BUTTON 1
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_1_action')
+                 and trigger.event.data.new_state.state == 'single' }}
+        sequence: !input button_1_single
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_1_action')
+                 and trigger.event.data.new_state.state == 'double' }}
+        sequence: !input button_1_double
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_1_action')
+                 and trigger.event.data.new_state.state == 'triple' }}
+        sequence: !input button_1_triple
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_1_action')
+                 and trigger.event.data.new_state.state == 'hold' }}
+        sequence: !input button_1_hold
+
+      # BUTTON 2
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_2_action')
+                 and trigger.event.data.new_state.state == 'single' }}
+        sequence: !input button_2_single
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_2_action')
+                 and trigger.event.data.new_state.state == 'double' }}
+        sequence: !input button_2_double
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_2_action')
+                 and trigger.event.data.new_state.state == 'triple' }}
+        sequence: !input button_2_triple
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_2_action')
+                 and trigger.event.data.new_state.state == 'hold' }}
+        sequence: !input button_2_hold
+
+      # BUTTON 3
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_3_action')
+                 and trigger.event.data.new_state.state == 'single' }}
+        sequence: !input button_3_single
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_3_action')
+                 and trigger.event.data.new_state.state == 'double' }}
+        sequence: !input button_3_double
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_3_action')
+                 and trigger.event.data.new_state.state == 'triple' }}
+        sequence: !input button_3_triple
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_3_action')
+                 and trigger.event.data.new_state.state == 'hold' }}
+        sequence: !input button_3_hold
+
+      # BUTTON 4
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_4_action')
+                 and trigger.event.data.new_state.state == 'single' }}
+        sequence: !input button_4_single
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_4_action')
+                 and trigger.event.data.new_state.state == 'double' }}
+        sequence: !input button_4_double
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_4_action')
+                 and trigger.event.data.new_state.state == 'triple' }}
+        sequence: !input button_4_triple
+
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.entity_id.endswith('button_4_action')
+                 and trigger.event.data.new_state.state == 'hold' }}
+        sequence: !input button_4_hold
